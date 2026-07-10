@@ -56,9 +56,9 @@ git checkout dev  && git merge main    # 冲突只在这一步解决
 
 链路:**push dev → GitHub Actions 构建镜像 → ghcr.io/atomalce/sub2api → 云服务器 pull**。
 
-- 服务器用 `deploy/docker-compose.yml`(含 postgres + redis),image 指向 GHCR 地址。
-- `deploy/.env` 必填 `POSTGRES_PASSWORD`;**必须固定 `JWT_SECRET` 与 `TOTP_ENCRYPTION_KEY`**(`openssl rand -hex 32`),否则重启全员掉登录。
-- 服务器更新:`docker compose pull && docker compose up -d`。
+- 服务器用 `deploy/docker-compose.yml`(含 postgres + redis),image 已在 dev 分支指向 GHCR(该行与上游冲突时保留我方)。
+- 首次部署:`./deploy/gen-env.sh` 一键生成 `.env`(随机 `POSTGRES_PASSWORD`/`JWT_SECRET`/`TOTP_ENCRYPTION_KEY`/管理员密码,固定密钥防止重启掉登录)。
+- 服务器首次:`cd deploy && ../deploy/gen-env.sh && docker compose up -d`;更新:`docker compose pull && docker compose up -d`。
 
 ---
 
